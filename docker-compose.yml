@@ -1,8 +1,8 @@
 services:
   # 📨 Servicio de mensajería RabbitMQ
-  rabbitmq:
+  sv-rabbitmq:
     image: bitnami/rabbitmq:latest   # Imagen oficial mantenida por Bitnami
-    container_name: rabbitmq         # Nombre del contenedor
+    container_name: sv-rabbitmq         # Nombre del contenedor
     ports:
       - "5672:5672"                  # Puerto de conexión para clientes AMQP
       - "15672:15672"                # Puerto para la consola de administración (UI web)
@@ -14,21 +14,22 @@ services:
     # Acceso UI: http://localhost:15672 (user: admin / pass: admin123)
 
   # 🐘 Base de datos PostgreSQL
-  postgres:
+  sv-postgres:
     image: postgres:15                # Imagen oficial de PostgreSQL (versión 15)
-    container_name: postgres          # Nombre del contenedor
+    container_name: sv-postgres          # Nombre del contenedor
     restart: always                   # Reinicia el contenedor automáticamente
     environment:
       POSTGRES_USER: postgres         # Usuario por defecto
       POSTGRES_PASSWORD: 123123       # Contraseña del usuario
       POSTGRES_DB: arquetipo          # Base de datos inicial
+      POSTGRES_HOST_AUTH_METHOD: trust # Modo de autenticación (trust para desarrollo)
     ports:
       - "5432:5432"                   # Puerto de conexión para clientes PostgreSQL
     volumes:
       - postgres_data:/var/lib/postgresql/data              # Persistencia de datos
       - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro # Script SQL de inicialización
-    command: >
-      postgres -c search_path=usuarios,public  # Configura el esquema por defecto
+    #command: ["postgres", "-c", "search_path=usuarios,public"]
+
 
 volumes:
   postgres_data:                      # Volumen persistente para la BD
