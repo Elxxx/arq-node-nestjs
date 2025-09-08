@@ -10,8 +10,8 @@ import { FileDomainService } from '../../../../domain/services/storage/storage.d
  *
  * @description
  * Encapsula la lógica de aplicación para recuperar un archivo de un contenedor
- * a través del puerto `FileStorageRepository`. 
- * 
+ * a través del puerto `FileStorageRepository`.
+ *
  * Integra reglas de negocio del dominio (`FileDomainService`) para asegurar
  * que solo se permitan extensiones válidas antes de proceder a la descarga.
  *

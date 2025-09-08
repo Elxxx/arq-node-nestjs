@@ -18,9 +18,5 @@ export interface AuthRepository {
    * @param nombreSistema - Nombre del sistema desde el que se intenta autenticar.
    * @returns Entidad AuthUser si es válido, o null si las credenciales no coinciden.
    */
-  validateUser(
-    userName: string,
-    password: string,
-    nombreSistema: string,
-  ): Promise<AuthUser | null>;
+  validateUser(userName: string, password: string, nombreSistema: string): Promise<AuthUser | null>;
 }

@@ -9,7 +9,11 @@ export class CreateRoleDto {
   @MaxLength(50)
   name!: string;
 
-  @ApiProperty({ example: 'Administrador con acceso completo', description: 'Descripción del rol', required: false })
+  @ApiProperty({
+    example: 'Administrador con acceso completo',
+    description: 'Descripción del rol',
+    required: false,
+  })
   @IsString()
   @MaxLength(255)
   description?: string;

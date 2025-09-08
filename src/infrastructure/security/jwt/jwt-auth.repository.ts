@@ -19,9 +19,7 @@ export class JwtAuthRepository implements AuthRepository {
    * @param jwtSecret - Clave secreta usada para firmar los JWT.
    *   Se inyecta dinámicamente desde las variables de entorno a través de `JwtModule`.
    */
-  constructor(
-    @Inject('JWT_SECRET') private readonly jwtSecret: string,
-  ) {}
+  constructor(@Inject('JWT_SECRET') private readonly jwtSecret: string) {}
 
   /**
    * Valida las credenciales de un usuario.
@@ -42,8 +40,16 @@ export class JwtAuthRepository implements AuthRepository {
    * console.log(user?.id); // "1"
    * ```
    */
-  async validateUser(userName: string, password: string, nombreSistema: string): Promise<AuthUser | null> {
-    if (userName === 'userName' && password === 'secreto123' && nombreSistema === 'Nombre Sistema') {
+  async validateUser(
+    userName: string,
+    password: string,
+    nombreSistema: string,
+  ): Promise<AuthUser | null> {
+    if (
+      userName === 'userName' &&
+      password === 'secreto123' &&
+      nombreSistema === 'Nombre Sistema'
+    ) {
       return new AuthUser('1', userName, nombreSistema, 'hashed-password');
     }
     return null;

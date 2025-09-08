@@ -35,8 +35,7 @@ import { MESSAGE_QUEUE_REPOSITORY } from '../../../domain/repositories/messaging
      */
     {
       provide: 'RABBITMQ_EXCHANGE',
-      useFactory: (config: ConfigService) =>
-        config.get<string>('rabbitmq.exchange'),
+      useFactory: (config: ConfigService) => config.get<string>('rabbitmq.exchange'),
       inject: [ConfigService],
     },
     /**
@@ -47,8 +46,7 @@ import { MESSAGE_QUEUE_REPOSITORY } from '../../../domain/repositories/messaging
      */
     {
       provide: 'RABBITMQ_EXCHANGE_TYPE',
-      useFactory: (config: ConfigService) =>
-        config.get<string>('rabbitmq.exchangeType') || 'topic',
+      useFactory: (config: ConfigService) => config.get<string>('rabbitmq.exchangeType') || 'topic',
       inject: [ConfigService],
     },
     /**
@@ -59,8 +57,7 @@ import { MESSAGE_QUEUE_REPOSITORY } from '../../../domain/repositories/messaging
      */
     {
       provide: 'RABBITMQ_DURABLE',
-      useFactory: (config: ConfigService) =>
-        config.get<boolean>('rabbitmq.durable') ?? true,
+      useFactory: (config: ConfigService) => config.get<boolean>('rabbitmq.durable') ?? true,
       inject: [ConfigService],
     },
     /**
@@ -70,8 +67,7 @@ import { MESSAGE_QUEUE_REPOSITORY } from '../../../domain/repositories/messaging
      */
     {
       provide: 'RABBITMQ_OPTIONS',
-      useFactory: (config: ConfigService) =>
-        config.get<RabbitMQOptions>('rabbitmq.options'),
+      useFactory: (config: ConfigService) => config.get<RabbitMQOptions>('rabbitmq.options'),
       inject: [ConfigService],
     },
     /**
@@ -92,8 +88,7 @@ import { MESSAGE_QUEUE_REPOSITORY } from '../../../domain/repositories/messaging
      */
     {
       provide: 'RABBITMQ_ROUTING_KEY',
-      useFactory: (config: ConfigService) =>
-        config.get<string>('rabbitmq.routingKey') || '#', // por defecto todas
+      useFactory: (config: ConfigService) => config.get<string>('rabbitmq.routingKey') || '#', // por defecto todas
       inject: [ConfigService],
     },
     /**
@@ -102,10 +97,10 @@ import { MESSAGE_QUEUE_REPOSITORY } from '../../../domain/repositories/messaging
      * Implementación: RabbitMQMessageQueueRepository
      */
     {
-      provide: MESSAGE_QUEUE_REPOSITORY, 
+      provide: MESSAGE_QUEUE_REPOSITORY,
       useClass: RabbitMQMessageQueueRepository,
     },
   ],
-  exports: [MESSAGE_QUEUE_REPOSITORY], 
+  exports: [MESSAGE_QUEUE_REPOSITORY],
 })
 export class RabbitMQModule {}

@@ -26,7 +26,10 @@ export class PublishMessageDto {
   @IsNotEmpty()
   exchange!: string;
 
-  @ApiProperty({ example: 'user.created', description: 'Routing key usada para enrutar el mensaje' })
+  @ApiProperty({
+    example: 'user.created',
+    description: 'Routing key usada para enrutar el mensaje',
+  })
   @IsString()
   @IsNotEmpty()
   routingKey!: string;

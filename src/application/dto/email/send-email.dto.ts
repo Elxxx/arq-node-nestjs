@@ -58,7 +58,10 @@ export class SendEmailDto {
    *
    * @example "Hola, gracias por registrarte!"
    */
-  @ApiProperty({ example: 'Hola, gracias por registrarte!', description: 'Cuerpo del correo (texto o HTML)' })
+  @ApiProperty({
+    example: 'Hola, gracias por registrarte!',
+    description: 'Cuerpo del correo (texto o HTML)',
+  })
   @IsString()
   @IsNotEmpty()
   @MaxLength(2000)

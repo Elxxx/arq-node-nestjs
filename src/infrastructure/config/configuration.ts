@@ -121,8 +121,6 @@ export default () => ({
     /** Routing key por defecto (opcional). */
     routingKey: process.env.RABBITMQ_ROUTING_KEY || 'default_routing_key',
     /** Opciones adicionales para la conexión a RabbitMQ (JSON). */
-    options: process.env.RABBITMQ_OPTIONS ? JSON.parse(process.env.RABBITMQ_OPTIONS) : {
-    },
+    options: process.env.RABBITMQ_OPTIONS ? JSON.parse(process.env.RABBITMQ_OPTIONS) : {},
   },
-
 });

@@ -20,9 +20,7 @@ import { MessageQueueRepository } from '../../../domain/repositories/messaging/m
  * para limpiar la conexión cuando Nest finaliza el módulo.
  */
 @Injectable()
-export class RabbitMQMessageQueueRepository
-  implements MessageQueueRepository, OnModuleDestroy
-{
+export class RabbitMQMessageQueueRepository implements MessageQueueRepository, OnModuleDestroy {
   /**
    * Manager de conexión hacia RabbitMQ (amqp-connection-manager).
    */
@@ -87,19 +85,13 @@ export class RabbitMQMessageQueueRepository
     });
 
     // Listeners de eventos del channel wrapper
-    this.channel.on('connect', () =>
-      this.logger.log('🔌 Conectado a RabbitMQ (channel activo)'),
-    );
+    this.channel.on('connect', () => this.logger.log('🔌 Conectado a RabbitMQ (channel activo)'));
     this.channel.on('error', (err) =>
       this.logger.error(
-        `❌ Error en channel RabbitMQ: ${
-          err instanceof Error ? err.message : JSON.stringify(err)
-        }`,
+        `❌ Error en channel RabbitMQ: ${err instanceof Error ? err.message : JSON.stringify(err)}`,
       ),
     );
-    this.channel.on('close', () =>
-      this.logger.warn('⚠️ Channel RabbitMQ cerrado'),
-    );
+    this.channel.on('close', () => this.logger.warn('⚠️ Channel RabbitMQ cerrado'));
   }
 
   /**
@@ -109,11 +101,7 @@ export class RabbitMQMessageQueueRepository
    * @param routingKey Routing key / binding key para el mensaje.
    * @param payload Carga útil a publicar.
    */
-  async publish(
-    exchange: string,
-    routingKey: string,
-    payload: unknown,
-  ): Promise<void> {
+  async publish(exchange: string, routingKey: string, payload: unknown): Promise<void> {
     const targetExchange = exchange || this.exchange;
     await this.channel.publish(targetExchange, routingKey, payload, {
       contentType: 'application/json',
@@ -148,9 +136,7 @@ export class RabbitMQMessageQueueRepository
       const content = JSON.parse(msg.content.toString('utf8'));
       this.channel.ack(msg);
 
-      this.logger.debug(
-        `📥 Mensaje recibido desde cola [${queue}]: ${JSON.stringify(content)}`,
-      );
+      this.logger.debug(`📥 Mensaje recibido desde cola [${queue}]: ${JSON.stringify(content)}`);
 
       return content;
     } catch (e) {
@@ -175,9 +161,7 @@ export class RabbitMQMessageQueueRepository
       this.logger.log('🔻 Conexión RabbitMQ cerrada correctamente');
     } catch (e) {
       this.logger.warn(
-        `⚠️ Error cerrando conexión RabbitMQ: ${
-          e instanceof Error ? e.message : 'desconocido'
-        }`,
+        `⚠️ Error cerrando conexión RabbitMQ: ${e instanceof Error ? e.message : 'desconocido'}`,
       );
     }
   }

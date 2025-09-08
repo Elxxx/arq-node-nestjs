@@ -1,35 +1,34 @@
 services:
   # 📨 Servicio de mensajería RabbitMQ
   sv-rabbitmq:
-    image: bitnami/rabbitmq:latest   # Imagen oficial mantenida por Bitnami
-    container_name: sv-rabbitmq         # Nombre del contenedor
+    image: bitnami/rabbitmq:latest # Imagen oficial mantenida por Bitnami
+    container_name: sv-rabbitmq # Nombre del contenedor
     ports:
-      - "5672:5672"                  # Puerto de conexión para clientes AMQP
-      - "15672:15672"                # Puerto para la consola de administración (UI web)
+      - '5672:5672' # Puerto de conexión para clientes AMQP
+      - '15672:15672' # Puerto para la consola de administración (UI web)
     environment:
-      - RABBITMQ_USERNAME=admin      # Usuario administrador
-      - RABBITMQ_PASSWORD=admin123   # Contraseña del usuario administrador
-      - RABBITMQ_VHOST=/             # Virtual host por defecto
+      - RABBITMQ_USERNAME=admin # Usuario administrador
+      - RABBITMQ_PASSWORD=admin123 # Contraseña del usuario administrador
+      - RABBITMQ_VHOST=/ # Virtual host por defecto
       - RABBITMQ_MANAGEMENT_ALLOW_WEB_ACCESS=true # Habilitar acceso web
     # Acceso UI: http://localhost:15672 (user: admin / pass: admin123)
 
   # 🐘 Base de datos PostgreSQL
   sv-postgres:
-    image: postgres:15                # Imagen oficial de PostgreSQL (versión 15)
-    container_name: sv-postgres          # Nombre del contenedor
-    restart: always                   # Reinicia el contenedor automáticamente
+    image: postgres:15 # Imagen oficial de PostgreSQL (versión 15)
+    container_name: sv-postgres # Nombre del contenedor
+    restart: always # Reinicia el contenedor automáticamente
     environment:
-      POSTGRES_USER: postgres         # Usuario por defecto
-      POSTGRES_PASSWORD: 123123       # Contraseña del usuario
-      POSTGRES_DB: arquetipo          # Base de datos inicial
+      POSTGRES_USER: postgres # Usuario por defecto
+      POSTGRES_PASSWORD: 123123 # Contraseña del usuario
+      POSTGRES_DB: arquetipo # Base de datos inicial
       POSTGRES_HOST_AUTH_METHOD: trust # Modo de autenticación (trust para desarrollo)
     ports:
-      - "5432:5432"                   # Puerto de conexión para clientes PostgreSQL
+      - '5432:5432' # Puerto de conexión para clientes PostgreSQL
     volumes:
-      - postgres_data:/var/lib/postgresql/data              # Persistencia de datos
+      - postgres_data:/var/lib/postgresql/data # Persistencia de datos
       - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro # Script SQL de inicialización
     #command: ["postgres", "-c", "search_path=usuarios,public"]
 
-
 volumes:
-  postgres_data:                      # Volumen persistente para la BD
+  postgres_data: # Volumen persistente para la BD

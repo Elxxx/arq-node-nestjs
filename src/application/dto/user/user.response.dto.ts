@@ -19,7 +19,11 @@ export class UserResponseDto {
   @ApiProperty({ example: '+56912345678', description: 'Teléfono de contacto', required: false })
   phone?: string;
 
-  @ApiProperty({ example: 'CL', description: 'Código ISO del país (ej. CL, US, ES)', required: false })
+  @ApiProperty({
+    example: 'CL',
+    description: 'Código ISO del país (ej. CL, US, ES)',
+    required: false,
+  })
   countryCode?: string;
 
   @ApiProperty({ example: true, description: 'Indica si el usuario está activo' })

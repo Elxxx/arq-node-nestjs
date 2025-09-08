@@ -44,14 +44,8 @@ export class AzureBlobStorageRepository implements FileStorageRepository {
    * console.log(url); // https://<account>.blob.core.windows.net/my-container/docs/example.txt
    * ```
    */
-  async upload(
-    container: string,
-    filename: string,
-    buffer: Buffer,
-  ): Promise<string> {
-    const blockBlobClient = this.containerClient.getBlockBlobClient(
-      `${container}/${filename}`,
-    );
+  async upload(container: string, filename: string, buffer: Buffer): Promise<string> {
+    const blockBlobClient = this.containerClient.getBlockBlobClient(`${container}/${filename}`);
     await blockBlobClient.uploadData(buffer);
     return blockBlobClient.url;
   }
@@ -72,9 +66,7 @@ export class AzureBlobStorageRepository implements FileStorageRepository {
    * ```
    */
   async download(container: string, filename: string): Promise<Buffer> {
-    const blockBlobClient = this.containerClient.getBlockBlobClient(
-      `${container}/${filename}`,
-    );
+    const blockBlobClient = this.containerClient.getBlockBlobClient(`${container}/${filename}`);
     const exists = await blockBlobClient.exists();
     if (!exists) throw new Error(`File ${filename} not found in ${container}`);
 
@@ -82,12 +74,8 @@ export class AzureBlobStorageRepository implements FileStorageRepository {
     const chunks: Buffer[] = [];
 
     return new Promise((resolve, reject) => {
-      downloadResponse.readableStreamBody?.on('data', (d) =>
-        chunks.push(d as Buffer),
-      );
-      downloadResponse.readableStreamBody?.on('end', () =>
-        resolve(Buffer.concat(chunks)),
-      );
+      downloadResponse.readableStreamBody?.on('data', (d) => chunks.push(d as Buffer));
+      downloadResponse.readableStreamBody?.on('end', () => resolve(Buffer.concat(chunks)));
       downloadResponse.readableStreamBody?.on('error', reject);
     });
   }

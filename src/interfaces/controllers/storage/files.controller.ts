@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { UploadFileUseCase } from '../../../application/use-cases/file/storage/upload-file.use-case';
@@ -72,10 +64,7 @@ export class FileController {
   @ApiResponse({ status: 200, description: 'Archivo descargado correctamente' })
   @ApiResponse({ status: 404, description: 'Archivo no encontrado' })
   @HttpCode(HttpStatus.OK)
-  async download(
-    @Param('container') container: string,
-    @Param('filename') filename: string,
-  ) {
+  async download(@Param('container') container: string, @Param('filename') filename: string) {
     const buffer = await this.downloadFile.execute(container, filename);
     return {
       filename,

@@ -3,7 +3,10 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Role } from '../../../../domain/entities/user/role/role.entity';
 import { CreateRoleDto } from '../../../dto/user/role/create-role.dto';
 import { RoleDomainService } from '../../../../domain/services/user/role/role.domain-service';
-import { ROLE_REPOSITORY, RoleRepository } from '../../../../domain/repositories/user/role.repository';
+import {
+  ROLE_REPOSITORY,
+  RoleRepository,
+} from '../../../../domain/repositories/user/role.repository';
 
 @Injectable()
 export class CreateRoleUseCase {

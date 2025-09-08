@@ -1,7 +1,10 @@
 // src/application/use-cases/role/update-role.use-case.ts
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { UpdateRoleDto } from '../../../dto/user/role/update-role.dto';
-import { ROLE_REPOSITORY, RoleRepository } from '../../../../domain/repositories/user/role.repository';
+import {
+  ROLE_REPOSITORY,
+  RoleRepository,
+} from '../../../../domain/repositories/user/role.repository';
 
 @Injectable()
 export class UpdateRoleUseCase {

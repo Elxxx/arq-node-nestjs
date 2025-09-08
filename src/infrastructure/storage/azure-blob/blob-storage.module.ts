@@ -10,7 +10,7 @@ import { AzureBlobStorageRepository } from './azure-blob-storage.repository';
  * @description
  * Este módulo configura e inyecta la dependencia de Azure Blob Storage
  * en la aplicación, siguiendo el patrón de puertos y adaptadores.
- * 
+ *
  * @features
  * - Obtiene credenciales y configuración desde `ConfigService`.
  * - Expone un `ContainerClient` de Azure para acceso bajo nivel.
@@ -45,7 +45,9 @@ import { AzureBlobStorageRepository } from './azure-blob-storage.repository';
         const containerName = configService.get<string>('azure.storage.container');
 
         if (!connectionString || !containerName) {
-          throw new Error('Se debe proporcionar las variables de conexión de Azure Blob Storage y el nombre del contenedor');
+          throw new Error(
+            'Se debe proporcionar las variables de conexión de Azure Blob Storage y el nombre del contenedor',
+          );
         }
 
         return new ContainerClient(connectionString, containerName);

@@ -65,7 +65,11 @@ export class RolesController {
   @ApiResponse({ status: 200, type: [RoleResponseDto] })
   async findAll(): Promise<GenericResponse<RoleResponseDto[]>> {
     const roles = await this.listRoles.execute();
-    return { success: true, message: 'Roles listados correctamente', data: roles.map(r => this.toResponse(r)) };
+    return {
+      success: true,
+      message: 'Roles listados correctamente',
+      data: roles.map((r) => this.toResponse(r)),
+    };
   }
 
   @Put(':id')

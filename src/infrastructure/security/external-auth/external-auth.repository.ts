@@ -64,5 +64,4 @@ export class ExternalAuthRepository implements AuthRepository {
       return null;
     }
   }
-
 }

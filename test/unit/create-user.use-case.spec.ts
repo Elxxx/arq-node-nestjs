@@ -92,8 +92,8 @@ describe('CreateUserUseCase', () => {
     await useCase.execute({ name: 'Ada', email: 'ada@example.com' });
 
     // Segundo intento con mismo email debe fallar
-    await expect(
-      useCase.execute({ name: 'Other', email: 'ada@example.com' }),
-    ).rejects.toThrow('Email already in use');
+    await expect(useCase.execute({ name: 'Other', email: 'ada@example.com' })).rejects.toThrow(
+      'Email already in use',
+    );
   });
 });

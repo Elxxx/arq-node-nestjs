@@ -22,7 +22,7 @@ src/
 │ ├─ config/
 │ ├─ email/
 │ ├─ logging/
-│ ├─ messaging/ 
+│ ├─ messaging/
 │ ├─ persistence/
 │ ├─ security/
 │ └─ storage/
@@ -37,7 +37,7 @@ src/
 
 ## 🏗️ Principios Aplicados
 
-**Arquitectura Hexagonal (Ports & Adapters)** → separación clara entre dominio, aplicación e infraestructura.  
+**Arquitectura Hexagonal (Ports & Adapters)** → separación clara entre dominio, aplicación e infraestructura.
 
 ✅ **SOLID** aplicado:
 
@@ -62,6 +62,7 @@ src/
 Dependencias y Librerías principales aplicadas en el arquetipo.
 
 **Core Framework**:
+
 - @nestjs/common ^11.1.6
 - @nestjs/core ^11.1.6
 - @nestjs/platform-express ^11.1.6
@@ -166,9 +167,8 @@ POSTGRES_SCHEMA=usuarios
 AZURE_STORAGE_CONNECTION_STRING=string-de-conexion-azure
 AZURE_CONTAINER=container-name
 
-
 **Configuración de SendGrid**
-SENDGRID_API_KEY=key-de-api-sendgrid**
+SENDGRID_API_KEY=key-de-api-sendgrid\*\*
 SENDGRID_SENDER=casilla-sendgrid
 
 **Configuración de JWT**

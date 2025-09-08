@@ -77,8 +77,8 @@ export class AwsS3Repository implements FileStorageRepository {
    * console.log(buffer.toString('utf-8')); // "Hola"
    * ```
    */
-async download(container: string, filename: string): Promise<Buffer> {
-  const key = `${container}/${filename}`;
+  async download(container: string, filename: string): Promise<Buffer> {
+    const key = `${container}/${filename}`;
 
     try {
       const response = await this.s3

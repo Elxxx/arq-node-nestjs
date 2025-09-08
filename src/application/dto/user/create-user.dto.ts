@@ -1,5 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength, IsBoolean } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+  IsBoolean,
+} from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({ example: 'Ada', description: 'Primer nombre del usuario' })
@@ -25,19 +33,30 @@ export class CreateUserDto {
   @MaxLength(255)
   email!: string;
 
-  @ApiProperty({ example: '+56912345678', description: 'Teléfono de contacto del usuario', required: false })
+  @ApiProperty({
+    example: '+56912345678',
+    description: 'Teléfono de contacto del usuario',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   @MaxLength(20)
   phone?: string;
 
-  @ApiProperty({ example: 'CL', description: 'Código ISO del país del usuario (ej. CL, US, ES)', required: false })
+  @ApiProperty({
+    example: 'CL',
+    description: 'Código ISO del país del usuario (ej. CL, US, ES)',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   @MaxLength(2)
   countryCode?: string;
 
-  @ApiProperty({ example: 'SuperSecret123!', description: 'Contraseña del usuario (mínimo 8 caracteres)' })
+  @ApiProperty({
+    example: 'SuperSecret123!',
+    description: 'Contraseña del usuario (mínimo 8 caracteres)',
+  })
   @IsString()
   @MinLength(8)
   @MaxLength(255)
@@ -47,7 +66,12 @@ export class CreateUserDto {
   @IsNotEmpty()
   roleId!: number;
 
-  @ApiProperty({ example: true, description: 'Indica si el usuario está activo', required: false, default: false })
+  @ApiProperty({
+    example: true,
+    description: 'Indica si el usuario está activo',
+    required: false,
+    default: false,
+  })
   @IsBoolean()
   @IsOptional()
   active?: boolean = false;

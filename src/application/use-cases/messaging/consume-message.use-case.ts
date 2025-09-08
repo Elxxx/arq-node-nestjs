@@ -1,6 +1,9 @@
 // src/application/use-cases/messaging/consume-message.use-case.ts
 import { Inject, Injectable } from '@nestjs/common';
-import { MESSAGE_QUEUE_REPOSITORY, MessageQueueRepository } from '../../../domain/repositories/messaging/message-queue.repository';
+import {
+  MESSAGE_QUEUE_REPOSITORY,
+  MessageQueueRepository,
+} from '../../../domain/repositories/messaging/message-queue.repository';
 
 /**
  * Caso de uso: Consumir mensaje de RabbitMQ.

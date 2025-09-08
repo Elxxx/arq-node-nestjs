@@ -1,5 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { EMAIL_REPOSITORY, EmailRepository } from '../../../domain/repositories/email/email.repository';
+import {
+  EMAIL_REPOSITORY,
+  EmailRepository,
+} from '../../../domain/repositories/email/email.repository';
 import { EmailDomainService } from '../../../domain/services/email/email.domain-service';
 
 /**

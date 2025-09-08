@@ -32,7 +32,6 @@ export class FileDomainService {
    * @throws {Error} Si el archivo no tiene una extensión permitida.
    */
   ensureValidExtension(filename: string, allowedExtensions: string[]): void {
-    
     const ext = filename.split('.').pop()?.toLowerCase();
     if (!ext || !allowedExtensions.includes(ext)) {
       throw new Error(`La extensión de archivo .${ext} no está permitida`);

@@ -21,10 +21,7 @@ import { TypeOrmUserRepository } from './user.repository.typeorm';
  * @pattern Module + Adapter (Hexagonal Architecture)
  */
 @Module({
-  imports: [
-    ConfigModule,
-    TypeOrmModule.forFeature([UserEntitySchema]),
-  ],
+  imports: [ConfigModule, TypeOrmModule.forFeature([UserEntitySchema])],
   providers: [
     {
       provide: USER_REPOSITORY,

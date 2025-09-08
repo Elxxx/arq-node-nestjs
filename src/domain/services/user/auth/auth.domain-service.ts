@@ -25,8 +25,10 @@ export class AuthDomainService {
     const secret: Secret = this.configService.get<string>('jwt.secret', 'default-secret');
 
     // 👇 cast explícito para que TS lo entienda como StringValue o number
-    const expiresIn: SignOptions['expiresIn'] =
-      (this.configService.get<string>('jwt.expiresIn', '1h') as SignOptions['expiresIn']);
+    const expiresIn: SignOptions['expiresIn'] = this.configService.get<string>(
+      'jwt.expiresIn',
+      '1h',
+    ) as SignOptions['expiresIn'];
 
     const options: SignOptions = { expiresIn };
 

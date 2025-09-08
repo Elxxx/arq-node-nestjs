@@ -10,8 +10,8 @@ import { FileDomainService } from '../../../../domain/services/storage/storage.d
  *
  * @description
  * Encapsula la lógica de aplicación para subir archivos a través del
- * puerto `FileStorageRepository`. 
- * 
+ * puerto `FileStorageRepository`.
+ *
  * Integra las reglas de negocio del dominio (`FileDomainService`)
  * para validar que el archivo cumpla con:
  * - Extensiones permitidas.
@@ -60,15 +60,11 @@ export class UploadFileUseCase {
    *   'example.txt',
    *   Buffer.from('Hola mundo')
    * );
-   * console.log(url); 
+   * console.log(url);
    * // https://<account>.blob.core.windows.net/my-container/example.txt
    * ```
    */
-  async execute(
-    container: string,
-    filename: string,
-    buffer: Buffer,
-  ): Promise<string> {
+  async execute(container: string, filename: string, buffer: Buffer): Promise<string> {
     // ✅ Validaciones de dominio (no técnicas)
     this.fileDomainService.ensureValidExtension(filename, ['txt', 'json', 'md']);
     this.fileDomainService.ensureMaxFileSize(buffer, 2 * 1024 * 1024); // 2 MB
