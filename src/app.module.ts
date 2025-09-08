@@ -41,6 +41,16 @@ import { ListUsersUseCase } from './application/use-cases/user/list-users.use-ca
 import { UpdateUserUseCase } from './application/use-cases/user/update-user.use-case';
 import { DeleteUserUseCase } from './application/use-cases/user/delete-user.use-case';
 
+// 👥 Role API (controlador, repositorio, casos de uso, servicios de dominio)
+import { PostgresRoleModule } from './infrastructure/persistence/user/pg/role/postgres-role.module';
+import { RoleDomainService } from './domain/services/user/role/role.domain-service';
+import { RolesController } from './interfaces/controllers/user/role/roles.controller';
+import { CreateRoleUseCase } from './application/use-cases/user/role/create-role.use-case';
+import { GetRoleUseCase } from './application/use-cases/user/role/get-role.use-case';
+import { ListRolesUseCase } from './application/use-cases/user/role/list-roles.use-case';
+import { UpdateRoleUseCase } from './application/use-cases/user/role/update-role.use-case';
+import { DeleteRoleUseCase } from './application/use-cases/user/role/delete-role.use-case';
+
 // 📂 Storage API (Modulo, servicio, controlador, casos de uso)
 // 🔹 Opción 1: Azure
 import { BlobStorageModule } from './infrastructure/storage/azure-blob/blob-storage.module';
@@ -58,7 +68,7 @@ import { EmailController } from './interfaces/controllers/email/email.controller
 import { SendEmailUseCase } from './application/use-cases/email/send-email.use-case';
 
 // 🔐 Auth API (JWT)
-import { ExternalAuthModule } from './infrastructure/security/external-auth/external-auth.module';
+//import { ExternalAuthModule } from './infrastructure/security/external-auth/external-auth.module';
 import { AuthDomainService } from './domain/services/user/auth/auth.domain-service';
 import { AuthController } from './interfaces/controllers/auth/auth.controller';
 import { LoginUseCase } from './application/use-cases/auth/login.use-case';
@@ -96,6 +106,11 @@ import { ConsumeMessageUseCase } from './application/use-cases/messaging/consume
     PostgresUserModule,
 
     /**
+     * Módulo de persistencia de roles con PostgreSQL.
+     */
+    PostgresRoleModule,
+
+    /**
      * Logger estructurado con Pino (nestjs-pino).
      */
     LoggerModule,
@@ -114,7 +129,7 @@ import { ConsumeMessageUseCase } from './application/use-cases/messaging/consume
     /**
      * Módulo de autenticación con JWT + servicio externo.
      */
-    ExternalAuthModule,
+    //ExternalAuthModule,
 
     /**
      * Módulo de mensajería con RabbitMQ.
@@ -127,6 +142,7 @@ import { ConsumeMessageUseCase } from './application/use-cases/messaging/consume
    */
   controllers: [
     UsersController,
+    RolesController,
     FileController,
     EmailController,
     AuthController,
@@ -145,6 +161,14 @@ import { ConsumeMessageUseCase } from './application/use-cases/messaging/consume
     ListUsersUseCase,
     UpdateUserUseCase,
     DeleteUserUseCase,
+
+    // 👥 Role
+    RoleDomainService,
+    CreateRoleUseCase,
+    GetRoleUseCase,
+    ListRolesUseCase,
+    UpdateRoleUseCase,
+    DeleteRoleUseCase,
 
     // 🔹 Storage
     FileDomainService,

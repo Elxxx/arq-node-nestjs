@@ -1,38 +1,16 @@
+// src/application/dto/auth/login-response.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 
-/**
- * DTO de salida para la respuesta de autenticación.
- *
- * @remarks
- * - Define la estructura de la respuesta cuando un usuario inicia sesión correctamente.
- * - Devuelve información básica del usuario autenticado.
- * - No expone directamente la entidad de dominio (`AuthUser`), respetando la separación de capas.
- *
- * @example
- * ```json
- * {
- *   "id": "123",
- *   "userName": "usuario1",
- *   "system": "Mi Sistema"
- * }
- * ```
- */
 export class LoginResponseDto {
-  @ApiProperty({
-    example: '123',
-    description: 'Identificador único del usuario',
-  })
-  id!: string;
+  @ApiProperty({ example: 'jwt.token.aqui', description: 'Token JWT válido' })
+  accessToken!: string;
 
-  @ApiProperty({
-    example: 'usuario1',
-    description: 'Nombre de usuario autenticado',
-  })
-  userName!: string;
+  @ApiProperty({ example: 'uuid-123', description: 'ID del usuario autenticado' })
+  userId!: string;
 
-  @ApiProperty({
-    example: 'Mi Sistema',
-    description: 'Sistema desde el cual se autenticó el usuario',
-  })
-  system!: string;
+  @ApiProperty({ example: 'ada@example.com', description: 'Correo electrónico del usuario' })
+  email!: string;
+
+  @ApiProperty({ example: 'ADMIN', description: 'Rol del usuario' })
+  roleName!: string;
 }

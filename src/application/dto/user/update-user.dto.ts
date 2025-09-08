@@ -1,53 +1,56 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsEmail, IsOptional, IsString, MaxLength, MinLength, IsBoolean } from 'class-validator';
 
-/**
- * DTO de entrada para actualizar un usuario existente.
- *
- * @remarks
- * - Define los campos opcionales que el cliente puede enviar.
- * - Usa `class-validator` para validar automáticamente la request.
- * - Usa `@ApiPropertyOptional` para indicar en Swagger que los campos son opcionales.
- *
- * @example
- * PUT /users/:id
- * ```json
- * {
- *   "name": "Ada L.",
- *   "email": "ada.l@example.com"
- * }
- * ```
- */
 export class UpdateUserDto {
-  /**
-   * Nuevo nombre visible del usuario.
-   *
-   * - Opcional.
-   * - Máximo 100 caracteres.
-   *
-   * @example "Ada L."
-   */
-  @ApiPropertyOptional({ example: 'Ada L.', description: 'Nuevo nombre del usuario' })
+  @ApiPropertyOptional({ example: 'Ada', description: 'Nuevo primer nombre' })
   @IsString()
   @IsOptional()
   @MaxLength(100)
-  name?: string;
+  firstName?: string;
 
-  /**
-   * Nuevo correo electrónico del usuario.
-   *
-   * - Opcional.
-   * - Debe tener formato válido de email.
-   * - Máximo 255 caracteres.
-   *
-   * @example "ada.l@example.com"
-   */
-  @ApiPropertyOptional({
-    example: 'ada.l@example.com',
-    description: 'Nuevo correo electrónico del usuario',
-  })
+  @ApiPropertyOptional({ example: 'Byron', description: 'Nuevo segundo nombre' })
+  @IsString()
+  @IsOptional()
+  @MaxLength(100)
+  middleName?: string;
+
+  @ApiPropertyOptional({ example: 'Lovelace', description: 'Nuevo apellido' })
+  @IsString()
+  @IsOptional()
+  @MaxLength(100)
+  lastName?: string;
+
+  @ApiPropertyOptional({ example: 'ada.l@example.com', description: 'Nuevo correo electrónico' })
   @IsEmail()
   @IsOptional()
   @MaxLength(255)
   email?: string;
+
+  @ApiPropertyOptional({ example: '+56998765432', description: 'Nuevo teléfono' })
+  @IsString()
+  @IsOptional()
+  @MaxLength(20)
+  phone?: string;
+
+  @ApiPropertyOptional({ example: 'US', description: 'Nuevo país en código ISO' })
+  @IsString()
+  @IsOptional()
+  @MaxLength(2)
+  countryCode?: string;
+
+  @ApiPropertyOptional({ example: 'NewPassword123!', description: 'Nueva contraseña del usuario' })
+  @IsString()
+  @IsOptional()
+  @MinLength(8)
+  @MaxLength(255)
+  password?: string;
+
+  @ApiPropertyOptional({ example: 2, description: 'Nuevo rol del usuario' })
+  @IsOptional()
+  roleId?: number;
+
+  @ApiPropertyOptional({ example: true, description: 'Nuevo estado de activación' })
+  @IsBoolean()
+  @IsOptional()
+  active?: boolean;
 }

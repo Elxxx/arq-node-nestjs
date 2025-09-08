@@ -1,28 +1,21 @@
-// src/domain/services/user.domain-service.ts
+// src/domain/services/user/user.domain-service.ts
 import { Injectable, Inject } from '@nestjs/common';
 import { USER_REPOSITORY, UserRepository } from '../../repositories/user/user.repository';
+import { ROLE_REPOSITORY, RoleRepository } from '../../repositories/user/role.repository';
 
 /**
  * Servicio de dominio para usuarios.
  *
  * @remarks
  * - Contiene **reglas de negocio puras** relacionadas con usuarios.
- * - No depende de NestJS (excepto para la inyección de dependencias).
- * - Aquí se validan **invariantes** y restricciones propias del dominio.
- *
- * @example
- * // Uso en un caso de uso:
- * await this.userDomainService.ensureEmailIsUnique('ada@example.com');
+ * - No depende de frameworks de infraestructura (solo contratos de repositorios).
+ * - Se enfoca en validar invariantes y restricciones de dominio.
  */
 @Injectable()
 export class UserDomainService {
-  /**
-   * @param repo - Puerto del repositorio de usuarios.
-   *   Se inyecta usando el token `USER_REPOSITORY`.
-   */
   constructor(
-    @Inject(USER_REPOSITORY)
-    private readonly repo: UserRepository,
+    @Inject(USER_REPOSITORY) private readonly userRepo: UserRepository,
+    @Inject(ROLE_REPOSITORY) private readonly roleRepo: RoleRepository,
   ) {}
 
   /**
@@ -32,9 +25,38 @@ export class UserDomainService {
    * @throws {Error} Si el correo ya está en uso.
    */
   async ensureEmailIsUnique(email: string): Promise<void> {
-    const exists = await this.repo.findByEmail(email);
+    const exists = await this.userRepo.findByEmail(email);
     if (exists) {
-      throw new Error('Email already in use');
+      throw new Error('EMAIL_ALREADY_USED');
+    }
+  }
+
+  /**
+   * Verifica que el rol asignado exista en el sistema.
+   *
+   * @param roleId - ID del rol a verificar.
+   * @throws {Error} Si el rol no existe.
+   */
+  async ensureRoleExists(roleId: number): Promise<void> {
+    const role = await this.roleRepo.findById(roleId);
+    if (!role) {
+      throw new Error('ROLE_NOT_FOUND');
+    }
+  }
+
+  /**
+   * Reglas básicas de contraseñas.
+   *
+   * @param password - Contraseña en texto plano.
+   * @throws {Error} Si la contraseña no cumple las reglas mínimas.
+   */
+  ensurePasswordIsStrong(password: string): void {
+    if (password.length < 8) {
+      throw new Error('PASSWORD_TOO_SHORT');
+    }
+    // Ejemplo de regla opcional: debe contener número y letra
+    if (!/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
+      throw new Error('PASSWORD_WEAK');
     }
   }
 }

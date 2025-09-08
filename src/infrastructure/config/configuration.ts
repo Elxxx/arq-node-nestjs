@@ -69,7 +69,7 @@ export default () => ({
   azure: {
     storage: {
       /** Cadena de conexión a Azure Blob Storage. */
-      storageConnectionString: process.env.AZURE_STORAGE_CONNECTION_STRING || '',   
+      storageConnectionString: process.env.AZURE_STORAGE_CONNECTION_STRING || '',
       /** Nombre del contenedor en Azure Blob Storage. */
       container: process.env.AZURE_CONTAINER || 'default-container',
     },
@@ -81,10 +81,10 @@ export default () => ({
   sendgrid: {
     /** Clave de API de SendGrid. */
     apiKey: process.env.SENDGRID_API_KEY || '',
-    
+
     /** Dirección de correo del remitente. */
     sender: process.env.SENDGRID_SENDER || '',
-  },  
+  },
 
   /**
    * Configuración de JWT (JSON Web Tokens).
@@ -92,6 +92,8 @@ export default () => ({
   jwt: {
     /** Clave secreta para firmar los tokens JWT. */
     secret: process.env.JWT_SECRET || 'default-secret',
+    /** Tiempo de expiración del token (e.g., 1h, 30m). */
+    expiresIn: process.env.JWT_EXPIRES_IN || '1h',
   },
 
   /**
@@ -119,8 +121,8 @@ export default () => ({
     /** Routing key por defecto (opcional). */
     routingKey: process.env.RABBITMQ_ROUTING_KEY || 'default_routing_key',
     /** Opciones adicionales para la conexión a RabbitMQ (JSON). */
-    options: process.env.RABBITMQ_OPTIONS ? JSON.parse(process.env.RABBITMQ_OPTIONS) : {  
+    options: process.env.RABBITMQ_OPTIONS ? JSON.parse(process.env.RABBITMQ_OPTIONS) : {
     },
-  },   
-  
+  },
+
 });

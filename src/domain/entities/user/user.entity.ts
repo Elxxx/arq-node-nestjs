@@ -3,25 +3,42 @@
  *
  * @remarks
  * - Representa el concepto central de **usuario** dentro del dominio.
- * - Es un **POJO** (Plain Old JavaScript Object), sin dependencias de NestJS ni frameworks.
- * - Contiene solo **estado** (propiedades) y reglas mínimas de inicialización.
- *
- * @example
- * const user = new User({
- *   id: 'uuid-123',
- *   name: 'Ada Lovelace',
- *   email: 'ada@example.com'
- * });
+ * - Es un **POJO** sin dependencias de NestJS ni frameworks.
+ * - Encapsula estado y reglas mínimas de negocio.
  */
 export class User {
   /** Identificador único del usuario (UUID). */
   readonly id: string;
 
-  /** Nombre visible del usuario. */
-  name: string;
+  /** Primer nombre. */
+  firstName: string;
 
-  /** Correo electrónico único del usuario. */
+  /** Segundo nombre (opcional). */
+  middleName?: string;
+
+  /** Apellido. */
+  lastName: string;
+
+  /** Correo electrónico único. */
   email: string;
+
+  /** Teléfono de contacto (opcional). */
+  phone?: string;
+
+  /** Código ISO del país (ej: CL, US, ES). */
+  countryCode?: string;
+
+  /** Hash de la contraseña (nunca guardar plano). */
+  passwordHash: string;
+
+  /** Estado de activación del usuario. */
+  active: boolean;
+
+  /** Identificador del rol asociado. */
+  roleId: number;
+
+  /** Nombre del rol asociado (opcional, resuelto en la infraestructura). */
+  roleName?: string;
 
   /** Fecha de creación (inmutable). */
   readonly createdAt: Date;
@@ -29,27 +46,52 @@ export class User {
   /** Fecha de última actualización. */
   updatedAt: Date;
 
-  /**
-   * Constructor de la entidad `User`.
-   *
-   * @param props - Propiedades necesarias para inicializar un usuario.
-   * @param props.id - Identificador único (generalmente UUID).
-   * @param props.name - Nombre visible del usuario.
-   * @param props.email - Correo electrónico único.
-   * @param props.createdAt - (opcional) Fecha de creación; si no se pasa, se asigna `new Date()`.
-   * @param props.updatedAt - (opcional) Fecha de última actualización; si no se pasa, se asigna `new Date()`.
-   */
   constructor(props: {
     id: string;
-    name: string;
+    firstName: string;
+    middleName?: string;
+    lastName: string;
     email: string;
+    phone?: string;
+    countryCode?: string;
+    passwordHash: string;
+    active?: boolean;
+    roleId: number;
+    roleName?: string;
     createdAt?: Date;
     updatedAt?: Date;
   }) {
     this.id = props.id;
-    this.name = props.name;
+    this.firstName = props.firstName;
+    this.middleName = props.middleName;
+    this.lastName = props.lastName;
     this.email = props.email;
+    this.phone = props.phone;
+    this.countryCode = props.countryCode;
+    this.passwordHash = props.passwordHash;
+    this.active = props.active ?? false;
+    this.roleId = props.roleId;
+    this.roleName = props.roleName;
     this.createdAt = props.createdAt ?? new Date();
     this.updatedAt = props.updatedAt ?? new Date();
+  }
+
+  changePassword(newPasswordHash: string): void {
+    this.passwordHash = newPasswordHash;
+    this.touch();
+  }
+
+  activate(): void {
+    this.active = true;
+    this.touch();
+  }
+
+  deactivate(): void {
+    this.active = false;
+    this.touch();
+  }
+
+  private touch(): void {
+    this.updatedAt = new Date();
   }
 }
