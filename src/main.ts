@@ -49,6 +49,14 @@ async function bootstrap(): Promise<void> {
     }),
   );
 
+  // 🔑 Habilitar CORS
+  app.enableCors({
+    origin: ['http://localhost:3000'], // origen permitido
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true, // si usas cookies / JWT en headers
+  })
+
   // Configuración de Swagger/OpenAPI
   const config = app.get(ConfigService);
   if (config.get<boolean>('swagger.enabled')) {
