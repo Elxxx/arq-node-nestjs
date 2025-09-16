@@ -1,84 +1,78 @@
+// src/domain/entities/user/user.entity.ts
+import { Department } from '../department/department.entity';
+import { Role } from '../role/role.entity';
+import { Tenant } from '../tenant/tenant.entity';
+
 /**
- * Entidad de dominio `User`.
+ * Entidad de dominio `User`
  *
- * @remarks
- * - Representa el concepto central de **usuario** dentro del dominio.
- * - Es un **POJO** sin dependencias de NestJS ni frameworks.
- * - Encapsula estado y reglas mínimas de negocio.
+ * - Representa un usuario dentro del sistema.
+ * - No depende de TypeORM ni NestJS.
  */
 export class User {
-  /** Identificador único del usuario (UUID). */
   readonly id: string;
+  tenantId: string;
+  roleId: number;
+  departmentId?: string;
 
-  /** Primer nombre. */
-  firstName: string;
-
-  /** Segundo nombre (opcional). */
-  middleName?: string;
-
-  /** Apellido. */
-  lastName: string;
-
-  /** Correo electrónico único. */
   email: string;
-
-  /** Teléfono de contacto (opcional). */
+  firstName: string;
+  lastName: string;
   phone?: string;
-
-  /** Código ISO del país (ej: CL, US, ES). */
-  countryCode?: string;
-
-  /** Hash de la contraseña (nunca guardar plano). */
   passwordHash: string;
-
-  /** Estado de activación del usuario. */
   active: boolean;
 
-  /** Identificador del rol asociado. */
-  roleId: number;
-
-  /** Nombre del rol asociado (opcional, resuelto en la infraestructura). */
-  roleName?: string;
-
-  /** Fecha de creación (inmutable). */
   readonly createdAt: Date;
-
-  /** Fecha de última actualización. */
   updatedAt: Date;
+
+  // Campos enriquecidos (JOINs, no siempre presentes)
+  roleName?: string;
+  tenantName?: string;
+  departmentName?: string;
+
+  // Relaciones (cargadas bajo demanda)
+  role?: Role;
+  tenant?: Tenant;
+  department?: Department;
 
   constructor(props: {
     id: string;
-    firstName: string;
-    middleName?: string;
-    lastName: string;
+    tenantId: string;
+    roleId: number;
+    departmentId?: string;
     email: string;
+    firstName: string;
+    lastName: string;
     phone?: string;
-    countryCode?: string;
     passwordHash: string;
     active?: boolean;
-    roleId: number;
-    roleName?: string;
     createdAt?: Date;
     updatedAt?: Date;
+    roleName?: string;
+    tenantName?: string;
+    departmentName?: string;
+    role?: Role;
+    tenant?: Tenant;
+    department?: Department;
   }) {
     this.id = props.id;
-    this.firstName = props.firstName;
-    this.middleName = props.middleName;
-    this.lastName = props.lastName;
-    this.email = props.email;
-    this.phone = props.phone;
-    this.countryCode = props.countryCode;
-    this.passwordHash = props.passwordHash;
-    this.active = props.active ?? false;
+    this.tenantId = props.tenantId;
     this.roleId = props.roleId;
-    this.roleName = props.roleName;
+    this.departmentId = props.departmentId;
+    this.email = props.email;
+    this.firstName = props.firstName;
+    this.lastName = props.lastName;
+    this.phone = props.phone;
+    this.passwordHash = props.passwordHash;
+    this.active = props.active ?? true;
     this.createdAt = props.createdAt ?? new Date();
     this.updatedAt = props.updatedAt ?? new Date();
-  }
-
-  changePassword(newPasswordHash: string): void {
-    this.passwordHash = newPasswordHash;
-    this.touch();
+    this.roleName = props.roleName;
+    this.tenantName = props.tenantName;
+    this.departmentName = props.departmentName;
+    this.role = props.role;
+    this.tenant = props.tenant;
+    this.department = props.department;
   }
 
   activate(): void {

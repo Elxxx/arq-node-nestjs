@@ -1,78 +1,41 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  MaxLength,
-  MinLength,
-  IsBoolean,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsUUID, IsString, MinLength, IsInt } from 'class-validator';
 
 export class CreateUserDto {
-  @ApiProperty({ example: 'Ada', description: 'Primer nombre del usuario' })
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(100)
-  firstName!: string;
+  @ApiProperty({ example: 'uuid-tenant', description: 'Tenant al que pertenece el usuario' })
+  @IsUUID()
+  tenantId!: string;
 
-  @ApiProperty({ example: 'Byron', description: 'Segundo nombre del usuario', required: false })
-  @IsString()
-  @IsOptional()
-  @MaxLength(100)
-  middleName?: string;
-
-  @ApiProperty({ example: 'Lovelace', description: 'Apellido del usuario' })
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(100)
-  lastName!: string;
-
-  @ApiProperty({ example: 'ada@example.com', description: 'Correo electrónico único del usuario' })
+  @ApiProperty({ example: 'ada@example.com', description: 'Correo electrónico del usuario' })
   @IsEmail()
-  @MaxLength(255)
   email!: string;
 
-  @ApiProperty({
-    example: '+56912345678',
-    description: 'Teléfono de contacto del usuario',
-    required: false,
-  })
+  @ApiProperty({ example: 'Ada', description: 'Nombre' })
   @IsString()
+  @IsNotEmpty()
+  firstName!: string;
+
+  @ApiProperty({ example: 'Lovelace', description: 'Apellido' })
+  @IsString()
+  @IsNotEmpty()
+  lastName!: string;
+
+  @ApiProperty({ example: '+56912345678', description: 'Número de teléfono', required: false })
   @IsOptional()
-  @MaxLength(20)
+  @IsString()
   phone?: string;
 
-  @ApiProperty({
-    example: 'CL',
-    description: 'Código ISO del país del usuario (ej. CL, US, ES)',
-    required: false,
-  })
-  @IsString()
+  @ApiProperty({ example: 'uuid-department', description: 'Departamento', required: false })
   @IsOptional()
-  @MaxLength(2)
-  countryCode?: string;
+  @IsUUID()
+  departmentId?: string;
 
-  @ApiProperty({
-    example: 'SuperSecret123!',
-    description: 'Contraseña del usuario (mínimo 8 caracteres)',
-  })
-  @IsString()
-  @MinLength(8)
-  @MaxLength(255)
-  password!: string;
-
-  @ApiProperty({ example: 1, description: 'Identificador del rol asignado al usuario' })
-  @IsNotEmpty()
+  @ApiProperty({ example: 1, description: 'Rol del usuario (FK → roles.id)' })
+  @IsInt()
   roleId!: number;
 
-  @ApiProperty({
-    example: true,
-    description: 'Indica si el usuario está activo',
-    required: false,
-    default: false,
-  })
-  @IsBoolean()
-  @IsOptional()
-  active?: boolean = false;
+  @ApiProperty({ example: 'SuperSecret123!', description: 'Contraseña del usuario' })
+  @IsString()
+  @MinLength(8)
+  password!: string;
 }

@@ -1,37 +1,44 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
-import * as bcrypt from 'bcrypt';
-
+import { Inject, Injectable, BadRequestException } from '@nestjs/common';
+import { USER_REPOSITORY, UserRepository } from '../../../domain/repositories/user/user.repository';
 import { CreateUserDto } from '../../dto/user/create-user.dto';
 import { User } from '../../../domain/entities/user/user.entity';
-import { USER_REPOSITORY, UserRepository } from '../../../domain/repositories/user/user.repository';
-import { UserDomainService } from '../../../domain/services/user/user.domain-service';
+import * as bcrypt from 'bcrypt';
 
+/**
+ * Caso de uso: Crear un nuevo usuario.
+ *
+ * @description
+ * - Valida unicidad de email por tenant.
+ * - Hashea la contraseña antes de persistir.
+ * - Devuelve la entidad `User`.
+ */
 @Injectable()
 export class CreateUserUseCase {
   constructor(
-    private readonly domainService: UserDomainService,
-    @Inject(USER_REPOSITORY) private readonly repo: UserRepository,
+    @Inject(USER_REPOSITORY) private readonly userRepo: UserRepository,
   ) {}
 
-  async execute(input: CreateUserDto): Promise<User> {
-    await this.domainService.ensureEmailIsUnique(input.email);
+  async execute(dto: CreateUserDto): Promise<User> {
+    // Validar unicidad por tenant
+    const existing = await this.userRepo.findByEmailAndTenant(dto.email, dto.tenantId);
+    if (existing) throw new BadRequestException('El correo ya está registrado en este tenant');
 
-    const passwordHash = await bcrypt.hash(input.password, 10);
+    // Hash de contraseña
+    const passwordHash = await bcrypt.hash(dto.password, 10);
 
     const user = new User({
-      id: uuidv4(),
-      firstName: input.firstName,
-      middleName: input.middleName,
-      lastName: input.lastName,
-      email: input.email,
-      phone: input.phone,
-      countryCode: input.countryCode,
+      id: crypto.randomUUID(),
+      tenantId: dto.tenantId,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      email: dto.email,
       passwordHash,
-      active: input.active ?? false,
-      roleId: input.roleId,
+      roleId: dto.roleId,
+      departmentId: dto.departmentId,
+      phone: dto.phone,
+      active: true,
     });
 
-    return this.repo.create(user);
+    return this.userRepo.create(user);
   }
 }

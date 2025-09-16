@@ -1,14 +1,26 @@
-// src/application/dto/auth/login.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
+/**
+ * DTO para login.
+ *
+ * @description
+ * - Requiere tenantId para diferenciar usuarios en diferentes tenants.
+ */
 export class LoginDto {
-  @ApiProperty({ example: 'ada@example.com', description: 'Correo del usuario' })
+  @ApiProperty({ example: 'ada@example.com', description: 'Correo electrónico del usuario' })
   @IsEmail()
   email!: string;
 
-  @ApiProperty({ example: 'SuperSecure123!', description: 'Contraseña del usuario' })
+  @ApiProperty({ example: 'SuperSecret123!', description: 'Contraseña en texto plano' })
+  @IsString()
   @IsNotEmpty()
-  @MinLength(8)
   password!: string;
+
+  @ApiProperty({
+    example: 'uuid-tenant-123',
+    description: 'Identificador único del tenant al que pertenece el usuario',
+  })
+  @IsUUID()
+  tenantId!: string;
 }

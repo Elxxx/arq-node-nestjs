@@ -40,16 +40,7 @@ import { GetUserUseCase } from './application/use-cases/user/get-user.use-case';
 import { ListUsersUseCase } from './application/use-cases/user/list-users.use-case';
 import { UpdateUserUseCase } from './application/use-cases/user/update-user.use-case';
 import { DeleteUserUseCase } from './application/use-cases/user/delete-user.use-case';
-
-// 👥 Role API (controlador, repositorio, casos de uso, servicios de dominio)
-import { PostgresRoleModule } from './infrastructure/persistence/user/pg/role/postgres-role.module';
-import { RoleDomainService } from './domain/services/user/role/role.domain-service';
-import { RolesController } from './interfaces/controllers/user/role/roles.controller';
-import { CreateRoleUseCase } from './application/use-cases/user/role/create-role.use-case';
-import { GetRoleUseCase } from './application/use-cases/user/role/get-role.use-case';
-import { ListRolesUseCase } from './application/use-cases/user/role/list-roles.use-case';
-import { UpdateRoleUseCase } from './application/use-cases/user/role/update-role.use-case';
-import { DeleteRoleUseCase } from './application/use-cases/user/role/delete-role.use-case';
+import { RefreshTokenUseCase } from './application/use-cases/user/refresh-token.use-case';
 
 // 📂 Storage API (Modulo, servicio, controlador, casos de uso)
 // 🔹 Opción 1: Azure
@@ -69,7 +60,7 @@ import { SendEmailUseCase } from './application/use-cases/email/send-email.use-c
 
 // 🔐 Auth API (JWT)
 //import { ExternalAuthModule } from './infrastructure/security/external-auth/external-auth.module';
-import { AuthDomainService } from './domain/services/user/auth/auth.domain-service';
+import { AuthDomainService } from './domain/services/auth/auth.domain-service';
 import { AuthController } from './interfaces/controllers/auth/auth.controller';
 import { LoginUseCase } from './application/use-cases/auth/login.use-case';
 
@@ -79,6 +70,31 @@ import { MessageDomainService } from './domain/services/messaging/message.domain
 import { MessagingController } from './interfaces/controllers/messaging/messages.controller';
 import { PublishMessageUseCase } from './application/use-cases/messaging/publish-message.use-case';
 import { ConsumeMessageUseCase } from './application/use-cases/messaging/consume-message.use-case';
+
+// 👥 Tenant API (SaaS - multi-tenant)
+import { PostgresTenantModule } from './infrastructure/persistence/tenant/pg/postgres-tenant.module';
+import { TenantDomainService } from './domain/services/tenant/tenant.domain-service';
+import { TenantsController } from './interfaces/controllers/tenant/tenants.controller';
+import { CreateTenantUseCase } from './application/use-cases/tenant/create-tenant.use-case';
+import { ListTenantsUseCase } from './application/use-cases/tenant/list-tenants.use-case';
+import { GetTenantUseCase } from './application/use-cases/tenant/get-tenant.use-case';
+import { UpdateTenantUseCase } from './application/use-cases/tenant/update-tenant.use-case';
+import { DeleteTenantUseCase } from './application/use-cases/tenant/delete-tenant.use-case';
+
+// 👥 Campaña API (SaaS - multi-tenant)
+import { PostgresCampaignModule } from './infrastructure/persistence/campaign/pg/postgres-campaign.module';
+import { CampaignGroupingDomainService } from './domain/services/campaign/campaign-grouping.domain-service';
+import { CreateCampaignUseCase } from './application/use-cases/campaign/create-campaign.use-case';
+import { AttachParticipantsUseCase } from './application/use-cases/campaign/attach-participants.use-case';
+import { AutoGroupUseCase } from './application/use-cases/campaign/auto-group.use-case';
+import { ListCampaignGroupsUseCase } from './application/use-cases/campaign/list-groups.use-case';
+import { AssignTemplatesAutoUseCase } from './application/use-cases/campaign/assign-templates-auto.use-case';
+import { AssignTemplatesManualUseCase } from './application/use-cases/campaign/assign-templates-manual.use-case';
+import { DefineScheduleUseCase } from './application/use-cases/campaign/define-schedule.use-case';
+import { LaunchCampaignUseCase } from './application/use-cases/campaign/launch-campaign.use-case';
+import { ListCampaignsUseCase } from './application/use-cases/campaign/list-campaigns.use-case';
+import { GetCampaignUseCase } from './application/use-cases/campaign/get-campaign.use-case';
+import { CampaignsController } from './interfaces/controllers/campaign/campaigns.controller';
 
 @Module({
   imports: [
@@ -106,9 +122,14 @@ import { ConsumeMessageUseCase } from './application/use-cases/messaging/consume
     PostgresUserModule,
 
     /**
-     * Módulo de persistencia de roles con PostgreSQL.
+     * Módulo de persistencia de tenants con PostgreSQL.
      */
-    PostgresRoleModule,
+    PostgresTenantModule,
+
+    /**
+     * Módulo de persistencia de campañas con PostgreSQL.
+     */
+    PostgresCampaignModule,
 
     /**
      * Logger estructurado con Pino (nestjs-pino).
@@ -142,12 +163,13 @@ import { ConsumeMessageUseCase } from './application/use-cases/messaging/consume
    */
   controllers: [
     UsersController,
-    RolesController,
     FileController,
     EmailController,
     AuthController,
     MessagingController,
     HealthController,
+    TenantsController,
+    CampaignsController,
   ],
 
   /**
@@ -161,14 +183,7 @@ import { ConsumeMessageUseCase } from './application/use-cases/messaging/consume
     ListUsersUseCase,
     UpdateUserUseCase,
     DeleteUserUseCase,
-
-    // 👥 Role
-    RoleDomainService,
-    CreateRoleUseCase,
-    GetRoleUseCase,
-    ListRolesUseCase,
-    UpdateRoleUseCase,
-    DeleteRoleUseCase,
+    RefreshTokenUseCase,
 
     // 🔹 Storage
     FileDomainService,
@@ -187,6 +202,27 @@ import { ConsumeMessageUseCase } from './application/use-cases/messaging/consume
     PublishMessageUseCase,
     ConsumeMessageUseCase,
     MessageDomainService,
+
+    // 🔹 Tenant
+    TenantDomainService,
+    CreateTenantUseCase,
+    ListTenantsUseCase,
+    GetTenantUseCase,
+    UpdateTenantUseCase,
+    DeleteTenantUseCase,
+
+    // Campaña
+    CreateCampaignUseCase,
+    AttachParticipantsUseCase,
+    AutoGroupUseCase,
+    ListCampaignGroupsUseCase,
+    AssignTemplatesAutoUseCase,
+    AssignTemplatesManualUseCase,
+    DefineScheduleUseCase,
+    LaunchCampaignUseCase,
+    ListCampaignsUseCase,
+    GetCampaignUseCase,
+    CampaignGroupingDomainService,
 
     // 🌐 Filtro global de excepciones
     { provide: APP_FILTER, useClass: HttpExceptionFilter },

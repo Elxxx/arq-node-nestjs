@@ -1,62 +1,36 @@
-// src/domain/services/user/user.domain-service.ts
-import { Injectable, Inject } from '@nestjs/common';
-import { USER_REPOSITORY, UserRepository } from '../../repositories/user/user.repository';
-import { ROLE_REPOSITORY, RoleRepository } from '../../repositories/user/role.repository';
+import { Injectable, Inject, BadRequestException } from '@nestjs/common';
+import {
+  USER_REPOSITORY,
+  UserRepository,
+} from '../../repositories/user/user.repository';
 
 /**
- * Servicio de dominio para usuarios.
+ * Servicio de dominio para `User`.
  *
- * @remarks
- * - Contiene **reglas de negocio puras** relacionadas con usuarios.
- * - No depende de frameworks de infraestructura (solo contratos de repositorios).
- * - Se enfoca en validar invariantes y restricciones de dominio.
+ * @description
+ * - Encapsula reglas de negocio puras relacionadas con usuarios.
+ * - Valida invariantes como unicidad de email.
+ * - No depende de NestJS excepto para la inyección de dependencias.
+ *
+ * @pattern Domain Service (DDD)
  */
 @Injectable()
 export class UserDomainService {
   constructor(
-    @Inject(USER_REPOSITORY) private readonly userRepo: UserRepository,
-    @Inject(ROLE_REPOSITORY) private readonly roleRepo: RoleRepository,
+    @Inject(USER_REPOSITORY)
+    private readonly repo: UserRepository,
   ) {}
 
   /**
-   * Verifica que un correo electrónico no esté registrado en el sistema.
+   * Garantiza que el email sea único en el sistema.
    *
-   * @param email - Correo electrónico a verificar.
-   * @throws {Error} Si el correo ya está en uso.
+   * @param email - Correo a validar.
+   * @throws {BadRequestException} Si ya existe un usuario con ese correo.
    */
   async ensureEmailIsUnique(email: string): Promise<void> {
-    const exists = await this.userRepo.findByEmail(email);
+    const exists = await this.repo.findByEmail(email);
     if (exists) {
-      throw new Error('EMAIL_ALREADY_USED');
-    }
-  }
-
-  /**
-   * Verifica que el rol asignado exista en el sistema.
-   *
-   * @param roleId - ID del rol a verificar.
-   * @throws {Error} Si el rol no existe.
-   */
-  async ensureRoleExists(roleId: number): Promise<void> {
-    const role = await this.roleRepo.findById(roleId);
-    if (!role) {
-      throw new Error('ROLE_NOT_FOUND');
-    }
-  }
-
-  /**
-   * Reglas básicas de contraseñas.
-   *
-   * @param password - Contraseña en texto plano.
-   * @throws {Error} Si la contraseña no cumple las reglas mínimas.
-   */
-  ensurePasswordIsStrong(password: string): void {
-    if (password.length < 8) {
-      throw new Error('PASSWORD_TOO_SHORT');
-    }
-    // Ejemplo de regla opcional: debe contener número y letra
-    if (!/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
-      throw new Error('PASSWORD_WEAK');
+      throw new BadRequestException('El correo ya está en uso');
     }
   }
 }

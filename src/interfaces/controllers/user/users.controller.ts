@@ -34,18 +34,20 @@ export class UsersController {
     private readonly deleteUser: DeleteUserUseCase,
   ) {}
 
+  /**
+   * Mapper de dominio → DTO
+   */
   private toResponse(user: User): UserResponseDto {
     return {
       id: user.id,
-      firstName: user.firstName,
-      middleName: user.middleName,
-      lastName: user.lastName,
+      tenantId: user.tenantId,
       email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
       phone: user.phone,
-      countryCode: user.countryCode,
-      active: user.active,
+      departmentId: user.departmentId,
       roleId: user.roleId,
-      roleName: user.roleName ?? 'N/A', // ✅ ahora viene desde repo
+      active: user.active,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };
@@ -54,7 +56,9 @@ export class UsersController {
   @Post()
   @ApiOperation({ summary: 'Crear un usuario' })
   @ApiResponse({ status: 201, type: UserResponseDto })
-  async create(@Body() dto: CreateUserDto): Promise<GenericResponse<UserResponseDto>> {
+  async create(
+    @Body() dto: CreateUserDto,
+  ): Promise<GenericResponse<UserResponseDto>> {
     const user = await this.createUser.execute(dto);
     return {
       success: true,
@@ -67,7 +71,9 @@ export class UsersController {
   @ApiOperation({ summary: 'Obtener un usuario por ID' })
   @ApiResponse({ status: 200, type: UserResponseDto })
   @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
-  async findOne(@Param('id') id: string): Promise<GenericResponse<UserResponseDto>> {
+  async findOne(
+    @Param('id') id: string,
+  ): Promise<GenericResponse<UserResponseDto>> {
     const user = await this.getUser.execute(id);
     return {
       success: true,
@@ -107,7 +113,10 @@ export class UsersController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Eliminar un usuario' })
-  @ApiResponse({ status: 204, description: 'Usuario eliminado correctamente' })
+  @ApiResponse({
+    status: 204,
+    description: 'Usuario eliminado correctamente',
+  })
   @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   async remove(@Param('id') id: string): Promise<void> {
     await this.deleteUser.execute(id);
